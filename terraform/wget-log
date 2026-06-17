@@ -1,0 +1,6 @@
+--2026-06-17 16:46:34--  https://hashicorp.com/
+Resolving hashicorp.com (hashicorp.com)... 76.76.21.21
+Connecting to hashicorp.com (hashicorp.com)|76.76.21.21|:443... connected.
+HTTP request sent, awaiting response... 429 Too Many Requests
+2026-06-17 16:46:34 ERROR 429: Too Many Requests.
+

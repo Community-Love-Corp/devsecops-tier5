@@ -1,9 +1,9 @@
 variable "prefix" {
-  type = string
+  type    = string
   default = "jaydemo"
 }
 
 variable "location" {
-  type = string
+  type    = string
   default = "australiaeast"
 }
