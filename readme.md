@@ -17,3 +17,11 @@ Day 1 complete- Terraform used successfully to setup aks infrastructure, and to 
 Wednesday 17 June 2026 14:50: 
 
 Added package.json and server.js. See See c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part2Of4.doc. 
+
+0.4 Kali Linux
+
+Wednesday 17 June 2026 17:45: 
+
+Successful image deployment - Step 3 completed. See See c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part2Of4.doc. 
+
+![ Successful Docker Push ](./ImageDeployment.jpg)
