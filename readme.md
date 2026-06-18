@@ -11,3 +11,9 @@ Wednesday 17 June 2026 18:00:
 Day 1 complete- Terraform used successfully to setup aks infrastructure, and to destroy. See c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Bridge.doc. 
 
 ![Cost savings via cloud infrastructure destruction](./TerraformDestruction.jpg)
+
+0.3 Kali Linux
+
+Wednesday 17 June 2026 14:50: 
+
+Added package.json and server.js. See See c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part2Of4.doc. 
