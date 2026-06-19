@@ -1,0 +1,12 @@
+# Port 8080 is what the app running on the container exposes itself on, and 80 is what the service will expose to customer 
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaydemo-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: jaydemo-api
+  ports:
+  - port: 80
+    targetPort: 8080

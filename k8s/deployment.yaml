@@ -1,0 +1,38 @@
+# In the deployment, there is one replica. There is a volume created using key vault creation class. The replica has the config map secret and the key vault volume mounted. 
+# In a kubernetes deployment, template describes a pod. A pod has two main parts - metadata (names, labels) and spec (containers, volumes). Kubernetes looks for metadata.spec and metadata.volumes.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaydemo-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaydemo-api
+  template:
+    metadata:
+      labels:
+        app: jaydemo-api
+    spec: # FIXED: Aligned with metadata
+      containers:
+      - name: jaydemo-api
+        image: jaydemoacr.azurecr.io/jaydemo-api:v1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APP_CONFIG
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_CONFIG
+        volumeMounts:
+        - name: secrets-store
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+      volumes: # FIXED: Aligned with containers
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "azure-kv-provider"
