@@ -43,5 +43,5 @@ a. Remove cached provider binary/plugins from tracked files, and
 b. Add it and similar files to .gitignore
 
 0.7 Kali Linux
-Saturday 20 June 2026 22:00: Repo sent to Github to dev branch. 
+Saturday 20 June 2026 22:00: Repo sent to Github to dev branch- See Section 'Pre-req' in c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc. 
 
