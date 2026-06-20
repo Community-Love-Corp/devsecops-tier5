@@ -27,7 +27,7 @@ Successful image deployment - Step 3 completed. See See c:/users/moose/documents
 ![ Successful Docker Push ](./ImageDeployment.jpg)
 
 0.5 Kali Linux
-Wednesday 20 June 2026 01:55: 
+Saturday 20 June 2026 01:55: 
 
 ![ api functional on kubernetes 1 ](./health.jpg)
 
@@ -36,3 +36,8 @@ Wednesday 20 June 2026 01:55:
 ![ api functional on kubernetes 1 ](./secret.jpg)
 
 For Details,  see c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part2Of4.doc. 
+
+0.6 Kali Linux
+Saturday 20 June 2026 20:34: Preparation for pushing to public Git Repo: 
+a. Remove cached provider binary/plugins from tracked files, and
+b. Add it and similar files to .gitignore
