@@ -38,7 +38,8 @@ resource "azurerm_key_vault_access_policy" "terraform_runner" {
     "List",
     "Set",
     "Delete",
-    "Purge"
+    "Purge", # <-- Required if you want to permanently delete secrets
+    "Recover" # <-- Required if ability to recover soft deleted secrets is needed
   ]
 }
 
