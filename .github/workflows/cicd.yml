@@ -25,7 +25,7 @@ jobs:
 
     - name: Terraform Init
       run: |
-        terraform init -input=false \
+        terraform init -input=false -reconfigure \
           -backend-config="resource_group_name=msdocs-core-sql" \
           -backend-config="storage_account_name=memories123" \
           -backend-config="container_name=tfstate" \
