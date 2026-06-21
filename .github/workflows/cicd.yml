@@ -225,7 +225,7 @@ jobs:
       env:
         API_URL: ${{ secrets.API_URL }}
       run: npm run test:ci --reporter=line
-      working-directory: app
+      working-directory: tests
 
     - name: Upload Playwright HTML report
       if: always()

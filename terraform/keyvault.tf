@@ -23,15 +23,28 @@ resource "azurerm_key_vault" "kv" {
     ]
   }
   
-  access_policy {
+  #access_policy {
     # References your Key Vault resource block
-    tenant_id    = "4c475f22-5bbf-43c6-833d-810e9335ade4"
+  #  tenant_id    = "4c475f22-5bbf-43c6-833d-810e9335ade4"
     
     # Targets the exact Object ID requested by the error log
   #  object_id    = azurerm_kubernetes_cluster.aks.key_vault_secrets_provider[0].secret_identity[0].object_id
   #  object_id    = "a926f8d7-44c9-461b-9fb5-6c208a07b2b3"
-    object_id    = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+  #  object_id    = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
     # Grants the explicit actions needed to mount the files
+  #  secret_permissions = [
+  #    "Get",
+  #    "List"
+  # ]
+  #}
+  
+    # 2. UPDATED: Target the explicit Secrets Provider Add-on Identity
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    
+    # Swapped from kubelet_identity to the exact CSI driver addon ID
+    object_id = azurerm_kubernetes_cluster.aks.key_vault_secrets_provider[0].secret_identity[0].object_id
+
     secret_permissions = [
       "Get",
       "List"
@@ -49,14 +62,14 @@ resource "azurerm_key_vault_secret" "mysecret" {
 data "azurerm_client_config" "current" {}
 
 
-resource "azurerm_role_assignment" "kubelet_kv_secrets_user" {
-  scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets User"
-  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+#resource "azurerm_role_assignment" "kubelet_kv_secrets_user" {
+#  scope                = azurerm_key_vault.kv.id
+#  role_definition_name = "Key Vault Secrets User"
+#  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
 
   # Forces Terraform to wait until the cluster is fully modified before mapping
-  depends_on = [azurerm_kubernetes_cluster.aks]
-}
+#  depends_on = [azurerm_kubernetes_cluster.aks]
+#}
 
 #resource "azurerm_key_vault_access_policy" "aks_secrets_provider" {
   # References your Key Vault resource block
