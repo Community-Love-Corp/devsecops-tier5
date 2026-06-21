@@ -48,6 +48,16 @@ resource "azurerm_key_vault_secret" "mysecret" {
 
 data "azurerm_client_config" "current" {}
 
+
+resource "azurerm_role_assignment" "kubelet_kv_secrets_user" {
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+
+  # Forces Terraform to wait until the cluster is fully modified before mapping
+  depends_on = [azurerm_kubernetes_cluster.aks]
+}
+
 #resource "azurerm_key_vault_access_policy" "aks_secrets_provider" {
   # References your Key Vault resource block
 #  key_vault_id = azurerm_key_vault.kv.id 

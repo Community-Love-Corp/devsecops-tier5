@@ -93,3 +93,10 @@ The azure/login action had to added to all the downstream jobs in the cicd.yaml 
 Sunday 21 June 2026 21:37: 
 
 Idempotency fix to infrastructure job in cicd.yml. It involved setting up .tfstate file in storage account during Terraform init. For details, see Section 'Step 9 - Troubleshooting' in 'c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc'. 
+
+
+0.16 Kali Linux
+
+Sunday 21 June 2026 23:46: 
+
+Added RBAC to enable the cluster to access the key vault, to access secret. This is required because right now in cicd pipeline, the secret is unable to be retrieved using access policy setup. See keyvault.tf. For details, see Section 'Step 9 - Troubleshooting' in 'c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc'. 
