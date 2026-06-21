@@ -23,6 +23,11 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
+    - name: Purge Local State Residue
+      run: rm -f terraform.tfstate terraform.tfstate.backup .terraform.tfstate
+      working-directory: terraform
+      continue-on-error: true
+
     - name: Terraform Init
       run: |
         terraform init -input=false -reconfigure \
