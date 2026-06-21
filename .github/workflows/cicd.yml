@@ -44,7 +44,7 @@ jobs:
         name: kubeconfig
         path: terraform/kubeconfig
 
-  # 2. BUILD JOB
+# 2. BUILD JOB
   build:
     name: Build and Push Image
     needs: infra
@@ -53,25 +53,33 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    # 1. ADDED: Authenticate this runner container with Azure
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Download kubeconfig
       uses: actions/download-artifact@v4
       with:
         name: kubeconfig
 
+    # 2. FIXED: Explicit path mapping for the downloaded file
     - name: Set KUBECONFIG
-      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+      run: echo "KUBECONFIG=${{ github.workspace }}/kubeconfig" >> $GITHUB_ENV
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
     
+    # 3. FIXED: Removed redundant local export variable mapping
     - name: Verify kubeconfig download
       run: |
         ls -la
-        export KUBECONFIG=$(pwd)/kubeconfig
         if kubectl get nodes &> /dev/null; then
           echo "Nodes available: Yes"
         else
           echo "Nodes available: No"
+          kubectl get nodes --v=7 # Prints detailed error reason if it fails
           exit 1
         fi 
 
@@ -84,6 +92,7 @@ jobs:
     - name: Push image
       run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/jaydemo-api:v1
 
+
   # 3. DEPLOY JOB (With Manual Approval)
   deploy:
     name: Deploy to AKS
@@ -94,28 +103,35 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    # 1. ADDED: Authenticate this runner container with Azure
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Download kubeconfig
       uses: actions/download-artifact@v4
       with:
         name: kubeconfig
 
+    # 2. FIXED: Explicit path mapping for the downloaded file
     - name: Set KUBECONFIG
-      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+      run: echo "KUBECONFIG=${{ github.workspace }}/kubeconfig" >> $GITHUB_ENV
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
-    
+
+    # 3. FIXED: Removed redundant local export variable mapping
     - name: Verify kubeconfig download
       run: |
         ls -la
-        export KUBECONFIG=$(pwd)/kubeconfig
         if kubectl get nodes &> /dev/null; then
           echo "Nodes available: Yes"
         else
           echo "Nodes available: No"
+          kubectl get nodes --v=7 # Prints detailed error reason if it fails
           exit 1
         fi 
-
     - name: Apply manifests
       run: kubectl apply -f k8s/
 
@@ -128,28 +144,35 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    # 1. ADDED: Authenticate this runner container with Azure
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: Download kubeconfig
       uses: actions/download-artifact@v4
       with:
         name: kubeconfig
 
+    # 2. FIXED: Explicit path mapping for the downloaded file
     - name: Set KUBECONFIG
-      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+      run: echo "KUBECONFIG=${{ github.workspace }}/kubeconfig" >> $GITHUB_ENV
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
-    
+
+    # 3. FIXED: Removed redundant local export variable mapping
     - name: Verify kubeconfig download
       run: |
         ls -la
-        export KUBECONFIG=$(pwd)/kubeconfig
         if kubectl get nodes &> /dev/null; then
           echo "Nodes available: Yes"
         else
           echo "Nodes available: No"
+          kubectl get nodes --v=7 # Prints detailed error reason if it fails
           exit 1
         fi 
-
     - name: Install Node
       uses: actions/setup-node@v3
       with:
@@ -186,36 +209,38 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    # 1. ADDED: Authenticate this runner container with Azure
     - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
 
     - name: Download kubeconfig
       uses: actions/download-artifact@v4
       with:
         name: kubeconfig
 
+    # 2. FIXED: Explicit path mapping for the downloaded file
     - name: Set KUBECONFIG
-      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+      run: echo "KUBECONFIG=${{ github.workspace }}/kubeconfig" >> $GITHUB_ENV
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
-    
+
+    # 3. FIXED: Removed redundant local export variable mapping
     - name: Verify kubeconfig download
       run: |
         ls -la
-        export KUBECONFIG=$(pwd)/kubeconfig
         if kubectl get nodes &> /dev/null; then
           echo "Nodes available: Yes"
         else
           echo "Nodes available: No"
+          kubectl get nodes --v=7 # Prints detailed error reason if it fails
           exit 1
         fi 
-
     - name: Terraform Destroy
       run: terraform destroy -input=false -auto-approve
       working-directory: terraform
