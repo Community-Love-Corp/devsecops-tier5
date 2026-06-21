@@ -29,13 +29,13 @@ jobs:
       continue-on-error: true
 
     # ADDED: Deletes the ghost role assignment so your code can manage a clean version
-    - name: Clear Ghost Role Assignment
-      run: |
-        SCOPE="/subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourceGroups/jaydemo-rg/providers/Microsoft.ContainerRegistry/registries/jaydemoacr"
-        PRINCIPAL_ID="3b8c07a0-bfa0-4d45-8269-67759452f6ac"
+#    - name: Clear Ghost Role Assignment
+#      run: |
+#        SCOPE="/subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourceGroups/jaydemo-rg/providers/Microsoft.ContainerRegistry/registries/jaydemoacr"
+#        PRINCIPAL_ID="3b8c07a0-bfa0-4d45-8269-67759452f6ac"
         
-        echo "Checking for existing role assignments..."
-        az role assignment delete --assignee "$PRINCIPAL_ID" --role "AcrPull" --scope "$SCOPE" || true      
+#        echo "Checking for existing role assignments..."
+#        az role assignment delete --assignee "$PRINCIPAL_ID" --role "AcrPull" --scope "$SCOPE" || true      
 
     - name: Terraform Init
       run: |
@@ -72,6 +72,14 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
       working-directory: terraform
+
+# Step 2: Fix the pipeline extraction step (In your workflow YAML)
+#Update your Save kubeconfig step inside your infra job to use the -json decoding flag combined with jq. This strips out any array or structural brackets that break kubectl:
+
+    - name: Save kubeconfig
+      run: |
+        terraform output -json kube_config | jq -r '.' > kubeconfig      
+      working-directory: terraform      
 
     - name: Save kubeconfig
       run: terraform output -raw kube_config > kubeconfig
