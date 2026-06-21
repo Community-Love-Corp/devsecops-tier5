@@ -45,3 +45,9 @@ b. Add it and similar files to .gitignore
 0.7 Kali Linux
 Saturday 20 June 2026 22:00: Repo sent to Github to dev branch- See Section 'Pre-req' in c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc. 
 
+0.8 Kali Linux
+
+Sunday 21 June 2026 14:00: 
+
+Code added to enable CI/CD. See 'c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc'. 
+

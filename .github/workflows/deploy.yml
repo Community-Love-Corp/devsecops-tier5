@@ -1,0 +1,47 @@
+name: Deploy to AKS
+
+on:
+  workflow_dispatch:
+    inputs:
+      infra_run_id:
+        description: "The Run ID, in order to get kubeconfig used in infra.yml workflow's." 
+        required: true
+        type: string
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+
+    - name: Download kubeconfig from Infra Workflow
+      uses: actions/download-artifact@v4
+      with:
+        name: kubeconfig
+        run-id: ${{ inputs.infra_run_id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set KUBECONFIG
+      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+    
+    - name: Verify kubeconfig download
+    # &> /dev/null hides the cluster output error text.
+    # if checks the exit code of the command.
+    # exit 1 ensures the pipeline fails cleanly if the check returns "No".
+      run: |
+        ls -la
+        export KUBECONFIG=$(pwd)/kubeconfig
+        if kubectl get nodes  &> /dev/null; then
+          echo "Nodes available: Yes"
+        else
+          echo "Nodes available: No"
+          exit 1
+        fi 
+
+    - name: Apply manifests
+      run: kubectl apply -f k8s/

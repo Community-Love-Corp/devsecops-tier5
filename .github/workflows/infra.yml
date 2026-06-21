@@ -1,0 +1,43 @@
+# Three things: 
+#  a. Logs into Azure
+#  b. Runs Terraform init/plan/apply
+#  c. Saves kubeconfig as an artifact  
+
+name: Infrastructure
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: terraform
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: terraform
+
+    - name: Save kubeconfig
+      run: terraform output -raw kube_config > kubeconfig
+      working-directory: terraform
+
+    - name: Upload kubeconfig
+      uses: actions/upload-artifact@v3
+      with:
+        name: kubeconfig
+        path: terraform/kubeconfig
