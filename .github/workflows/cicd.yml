@@ -76,20 +76,16 @@ jobs:
 # Step 2: Fix the pipeline extraction step (In your workflow YAML)
 #Update your Save kubeconfig step inside your infra job to use the -json decoding flag combined with jq. This strips out any array or structural brackets that break kubectl:
 
-    - name: Save kubeconfig
-      run: |
-        terraform output -json kube_config | jq -r '.' > kubeconfig      
-      working-directory: terraform      
+#    - name: Save kubeconfig
+#      run: |
+#        terraform output -raw kube_config > kubeconfig      
+#      working-directory: terraform      
 
-    - name: Save kubeconfig
-      run: terraform output -raw kube_config > kubeconfig
-      working-directory: terraform
-
-    - name: Upload kubeconfig
-      uses: actions/upload-artifact@v4
-      with:
-        name: kubeconfig
-        path: terraform/kubeconfig
+#    - name: Upload kubeconfig
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: kubeconfig
+#        path: terraform/kubeconfig
 
 # 2. BUILD JOB
   build:
@@ -106,11 +102,11 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Download kubeconfig
-      uses: actions/download-artifact@v4
-      with:
-        name: kubeconfig
-
+    # FIXED: Replaces "Download kubeconfig" artifact with a clean native fetch
+    - name: Get AKS Credentials
+      run: |
+        az aks get-credentials --resource-group jaydemo-rg --name jaydemo-aks --file ./kubeconfig
+        
     # 2. FIXED: Explicit path mapping for the downloaded file
     - name: Set KUBECONFIG
       run: echo "KUBECONFIG=${{ github.workspace }}/kubeconfig" >> $GITHUB_ENV
@@ -156,10 +152,10 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Download kubeconfig
-      uses: actions/download-artifact@v4
-      with:
-        name: kubeconfig
+    # FIXED: Replaces "Download kubeconfig" artifact with a clean native fetch
+    - name: Get AKS Credentials
+      run: |
+        az aks get-credentials --resource-group jaydemo-rg --name jaydemo-aks --file ./kubeconfig
 
     # 2. FIXED: Explicit path mapping for the downloaded file
     - name: Set KUBECONFIG
@@ -197,10 +193,10 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Download kubeconfig
-      uses: actions/download-artifact@v4
-      with:
-        name: kubeconfig
+    # FIXED: Replaces "Download kubeconfig" artifact with a clean native fetch
+    - name: Get AKS Credentials
+      run: |
+        az aks get-credentials --resource-group jaydemo-rg --name jaydemo-aks --file ./kubeconfig
 
     # 2. FIXED: Explicit path mapping for the downloaded file
     - name: Set KUBECONFIG
@@ -265,10 +261,11 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Download kubeconfig
-      uses: actions/download-artifact@v4
-      with:
-        name: kubeconfig
+
+    # FIXED: Replaces "Download kubeconfig" artifact with a clean native fetch
+    - name: Get AKS Credentials
+      run: |
+        az aks get-credentials --resource-group jaydemo-rg --name jaydemo-aks --file ./kubeconfig
 
     # 2. FIXED: Explicit path mapping for the downloaded file
     - name: Set KUBECONFIG
