@@ -1,0 +1,219 @@
+name: End-to-End CI-CD Pipeline
+
+on:
+  push:
+    branches: [ "dev" ]
+  workflow_dispatch:
+
+jobs:
+  # 1. INFRASTRUCTURE JOB
+  infra:
+    name: Provision Infrastructure
+    runs-on: ubuntu-latest
+    environment: provision # <-- Triggers manual gate in GitHub
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: terraform
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: terraform
+
+    - name: Save kubeconfig
+      run: terraform output -raw kube_config > kubeconfig
+      working-directory: terraform
+
+    - name: Upload kubeconfig
+      uses: actions/upload-artifact@v4
+      with:
+        name: kubeconfig
+        path: terraform/kubeconfig
+
+  # 2. BUILD JOB
+  build:
+    name: Build and Push Image
+    needs: infra
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Download kubeconfig
+      uses: actions/download-artifact@v4
+      with:
+        name: kubeconfig
+
+    - name: Set KUBECONFIG
+      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+    
+    - name: Verify kubeconfig download
+      run: |
+        ls -la
+        export KUBECONFIG=$(pwd)/kubeconfig
+        if kubectl get nodes &> /dev/null; then
+          echo "Nodes available: Yes"
+        else
+          echo "Nodes available: No"
+          exit 1
+        fi 
+
+    - name: Login to ACR
+      run: az acr login --name ${{ secrets.ACR }}
+
+    - name: Build image
+      run: docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/jaydemo-api:v1 ./app
+
+    - name: Push image
+      run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/jaydemo-api:v1
+
+  # 3. DEPLOY JOB (With Manual Approval)
+  deploy:
+    name: Deploy to AKS
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production  # <-- Triggers manual gate in GitHub
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Download kubeconfig
+      uses: actions/download-artifact@v4
+      with:
+        name: kubeconfig
+
+    - name: Set KUBECONFIG
+      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+    
+    - name: Verify kubeconfig download
+      run: |
+        ls -la
+        export KUBECONFIG=$(pwd)/kubeconfig
+        if kubectl get nodes &> /dev/null; then
+          echo "Nodes available: Yes"
+        else
+          echo "Nodes available: No"
+          exit 1
+        fi 
+
+    - name: Apply manifests
+      run: kubectl apply -f k8s/
+
+  # 4. TEST JOB
+  test:
+    name: API Tests
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Download kubeconfig
+      uses: actions/download-artifact@v4
+      with:
+        name: kubeconfig
+
+    - name: Set KUBECONFIG
+      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+    
+    - name: Verify kubeconfig download
+      run: |
+        ls -la
+        export KUBECONFIG=$(pwd)/kubeconfig
+        if kubectl get nodes &> /dev/null; then
+          echo "Nodes available: Yes"
+        else
+          echo "Nodes available: No"
+          exit 1
+        fi 
+
+    - name: Install Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Run tests
+      env:
+        API_URL: ${{ secrets.API_URL }}
+      run: npm run test:ci --reporter=line
+
+    - name: Upload Playwright HTML report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: tests/playwright-report
+        retention-days: 7
+
+    - name: Upload Allure results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-results
+        path: tests/allure-results
+        retention-days: 7
+
+  # 5. DESTROY JOB (With Manual Approval)
+  destroy:
+    name: Destroy Infrastructure
+    needs: test
+    runs-on: ubuntu-latest
+    environment: destroy  # <-- Triggers manual gate in GitHub
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Download kubeconfig
+      uses: actions/download-artifact@v4
+      with:
+        name: kubeconfig
+
+    - name: Set KUBECONFIG
+      run: echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+    
+    - name: Verify kubeconfig download
+      run: |
+        ls -la
+        export KUBECONFIG=$(pwd)/kubeconfig
+        if kubectl get nodes &> /dev/null; then
+          echo "Nodes available: Yes"
+        else
+          echo "Nodes available: No"
+          exit 1
+        fi 
+
+    - name: Terraform Destroy
+      run: terraform destroy -auto-approve
+      working-directory: terraform
+

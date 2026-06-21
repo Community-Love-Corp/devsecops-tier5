@@ -51,3 +51,8 @@ Sunday 21 June 2026 14:00:
 
 Code added to enable CI/CD. See 'c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc'. 
 
+0.9 Kali Linux
+
+Sunday 21 June 2026 15:59: 
+
+Simplified cicd code inorder to solve errors, added gates via environments in pipeline and gave some elevated permissions to terraform runner object in Azure. See Section 'Step 9 - Troubleshooting' in 'c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc'. 

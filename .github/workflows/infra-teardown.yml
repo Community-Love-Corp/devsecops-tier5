@@ -6,8 +6,8 @@
 name: Destroy Infrastructure
 
 on:
-  push:
-    branches: [ "dev" ]
+#  push:
+#    branches: [ "dev" ]
   workflow_dispatch:
     inputs:
       infra_run_id:
