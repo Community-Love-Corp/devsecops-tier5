@@ -22,14 +22,11 @@ jobs:
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
-      
-    - name: Clean Local State Remanants
-      run: rm -rf .terraform* terraform.tfstate*
-    
+
+# -migrate-state flag says, if you find anything out there, just overwrite/migrate it automatically without asking me.    
     - name: Terraform Init
       run: |
-        terraform init -input=false -reconfigure
-        terraform force-unlock -force 
+        terraform init -input=false -migrate-state -force-copy
       
       working-directory: terraform
 
