@@ -22,9 +22,15 @@ jobs:
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
-
+      
+    - name: Clean Local State Remanants
+      run: rm -rf .terraform* terraform.tfstate*
+    
     - name: Terraform Init
-      run: terraform init -input=false -reconfigure
+      run: |
+        terraform init -input=false -reconfigure
+        terraform force-unlock -force 
+      
       working-directory: terraform
 
     - name: Terraform Apply
