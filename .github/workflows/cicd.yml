@@ -23,11 +23,25 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
-# -migrate-state flag says, if you find anything out there, just overwrite/migrate it automatically without asking me.    
     - name: Terraform Init
       run: |
-        terraform init -input=false -migrate-state -force-copy
-      
+        terraform init -input=false \
+          -backend-config="resource_group_name=msdocs-core-sql" \
+          -backend-config="storage_account_name=memories123" \
+          -backend-config="container_name=tfstate" \
+          -backend-config="key=aks.terraform.tfstate" 
+      working-directory: terraform
+# -migrate-state flag says, if you find anything out there, just overwrite/migrate it automatically without asking me.    
+#    - name: Terraform Init
+#      run: |
+#        terraform init -input=false -migrate-state -force-copy   
+#      working-directory: terraform
+
+    - name: One-Time State Sync Import
+      run: |
+        terraform import azurerm_container_registry.acr /subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourceGroups/jaydemo-rg/providers/Microsoft.ContainerRegistry/registries/jaydemoacr || true
+        terraform import azurerm_kubernetes_cluster.aks /subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourceGroups/jaydemo-rg/providers/Microsoft.ContainerService/managedClusters/jaydemo-aks || true
+        terraform import azurerm_virtual_network.vnet /subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourceGroups/jaydemo-rg/providers/Microsoft.Network/virtualNetworks/jaydemo-vnet || true        
       working-directory: terraform
 
     - name: Terraform Apply
