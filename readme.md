@@ -68,3 +68,10 @@ Idempotency issues existed because tfstate file is in .gitignore. Hence a cloud 
 Sunday 21 June 2026 19:37: 
 
 Added ability to recover soft-deleted secrets in key-vault to the terraform runner, due to Key Vault Access Policy current setup. For details, see Section 'Step 9 - Troubleshooting' in 'c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc'. 
+
+
+0.12 Kali Linux
+
+Sunday 21 June 2026 20:18: 
+
+Updated providers.tf to ignore soft deleted resources, when creating resources, in order to prevent recovery as that interferes with idempotency. For details, see Section 'Step 9 - Troubleshooting' in 'c:/users/moose/documents/Job Apps/Victoria Uni Technical Specialist/Part3Of4.doc'. 

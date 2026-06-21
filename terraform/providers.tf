@@ -34,12 +34,12 @@ provider "azurerm" {
 
     # Cognitive Services: Block recovery of soft-deleted accounts
     cognitive_account {
-      purge_soft_deleted_on_destroy = true
+      purge_soft_delete_on_destroy = true
     }
 
     # App Configuration: Block recovery of soft-deleted stores
     app_configuration {
-      purge_soft_deleted_on_destroy = true
+      purge_soft_delete_on_destroy = true
     }
   }
 }
