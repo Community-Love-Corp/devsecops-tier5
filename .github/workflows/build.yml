@@ -2,12 +2,15 @@
 name: Build and Push
 
 on:
+  push:
+    branches: [ "dev" ]
   workflow_dispatch:
     inputs:
       infra_run_id:
         description: "The Run ID, in order to get kubeconfig used in infra.yml workflow's." 
         required: true
         type: string
+
 
 jobs:
   build:
