@@ -24,11 +24,11 @@ jobs:
       uses: hashicorp/setup-terraform@v2
 
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -input=false -reconfigure
       working-directory: terraform
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve
+      run: terraform apply -input=false -auto-approve
       working-directory: terraform
 
     - name: Save kubeconfig
@@ -214,6 +214,6 @@ jobs:
         fi 
 
     - name: Terraform Destroy
-      run: terraform destroy -auto-approve
+      run: terraform destroy -input=false -auto-approve
       working-directory: terraform
 
