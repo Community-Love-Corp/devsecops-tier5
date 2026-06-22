@@ -64,8 +64,7 @@ resource "null_resource" "disable_csi_driver" {
       az aks disable-addons \
         --addons azure-keyvault-secrets-provider \
         --resource-group ${azurerm_resource_group.rg.name} \
-        --name ${azurerm_kubernetes_cluster.aks.name} \
-        --yes || true
+        --name ${azurerm_kubernetes_cluster.aks.name} || true
     EOT
   }
 }

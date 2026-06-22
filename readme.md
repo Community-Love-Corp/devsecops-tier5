@@ -188,7 +188,7 @@ Monday 22 June 2026 17:00
 Turns out that key vault needs CSI driver to be installed. Presently, MS does not expose that addon to the provider to enable via terraform, hence a null_resource has been added to aks.tf, in order to remain committed to IaC paradigm. Futher, Update/Creation of key vault is made dependant on running of that code snipped. 
 
 
-Hotfix #4: 
+Hotfix #5: 
 
 Monday 22 June 2026 17:14
 
