@@ -63,13 +63,13 @@ jobs:
 #        terraform import azurerm_role_assignment.aks_acr_pull /subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourceGroups/jaydemo-rg/providers/Microsoft.Authorization/roleAssignments/2284546a88e5be7dd8fd6db1efec8ace || true
 #      working-directory: terraform
 
-    - name: One-Time Finish Import
-      run: |
-         terraform import azurerm_user_assigned_identity.csi_identity ""/subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourcegroups/MC_jaydemo-rg_jaydemo-aks_australiaeast/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurekeyvaultsecretsprovider-jaydemo-aks" 
+#    - name: One-Time Finish Import
+#      run: |
+#         terraform import azurerm_user_assigned_identity.csi_identity ""/subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourcegroups/MC_jaydemo-rg_jaydemo-aks_australiaeast/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurekeyvaultsecretsprovider-jaydemo-aks" 
 #        terraform import azurerm_key_vault_secret.mysecret https://jaydemo-kv-v2.vault.azure.net/secrets/mysecret/be80230646c84c3b8d51a51ea7c83bdd
 #        terraform import azurerm_role_assignment.aks_acr_pull /subscriptions/eac7dbb7-a7ec-45bc-98de-902b34a2f404/resourceGroups/jaydemo-rg/providers/Microsoft.Authorization/roleAssignments/2284546a88e5be7dd8fd6db1efec8ace
-
-      working-directory: terraform
+#
+#      working-directory: terraform
 
     - name: Terraform Apply
       run: terraform apply -input=false -auto-approve
