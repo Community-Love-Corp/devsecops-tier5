@@ -20,14 +20,15 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin = "kubenet"
   }
   
- # key_vault_secrets_provider {
- #   secret_rotation_enabled  = true
- #   secret_rotation_interval = "2m"
- # }
+  key_vault_secrets_provider {
+    secret_rotation_enabled  = true
+    secret_rotation_interval = "2m"
+  }
   
   lifecycle {
     ignore_changes = [
       oidc_issuer_enabled
+      key_vault_secrets_provider
     ]
   }
 }
