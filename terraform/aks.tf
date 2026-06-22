@@ -27,7 +27,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   
   lifecycle {
     ignore_changes = [
-      oidc_issuer_enabled
+      oidc_issuer_enabled,
       key_vault_secrets_provider
     ]
   }
