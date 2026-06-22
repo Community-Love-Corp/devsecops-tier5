@@ -20,16 +20,22 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin = "kubenet"
   }
   
-  key_vault_secrets_provider {
-    secret_rotation_enabled  = true
-    secret_rotation_interval = "2m"
-  }
+ # key_vault_secrets_provider {
+ #   secret_rotation_enabled  = true
+ #   secret_rotation_interval = "2m"
+ # }
   
   lifecycle {
     ignore_changes = [
       oidc_issuer_enabled
     ]
   }
+}
+
+resource "azurerm_user_assigned_identity" "csi_identity" {
+  name                = "azurekeyvaultsecretprovider-${var.prefix}-aks"
+  resource_group_name = "MC_${azurerm_resource_group.rg.name}_${azurerm_kubernetes_cluster.aks.name}_${var.location}" 
+  location            = var.location
 }
 
 # See keyvault.tf for access policy block added, as this key vault complains that it does not accept RBAC as below 
@@ -52,6 +58,20 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
   # FIXED: Target the Kubelet Identity block instead of the Control Plane Identity
   principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
+}
+
+resource "azurerm_virtual_machine_scale_set_extension" "assign_csi_identity" {
+  name      = "assign-csi-identity"
+  virtual_machine_scale_set_id = azurerm_kubernetes_cluster.aks.default_node_pool[0].node_pool_id
+  publisher                    = "Microsoft.ManagedIdentity"
+  type                         = "ManagedIdentityExtensionForLinux"
+  type_handler_version         = "1.0"
+  
+  settings = jsonencode({
+    userAssignedIdentities = [
+      var.csi_identity_resource_id
+    ]
+  })  
 }
 
 #resource "null_resource" "disable_csi_driver" {
