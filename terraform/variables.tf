@@ -10,17 +10,17 @@ variable "location" {
 
 variable "csi_identity_resource_id" {
   type = string
-  default = "null"
+  default = null
 }
 
 variable "csi_identity_client_id" {
   type = string
-  default = "null"
+  default = null
 
 }
 
 variable "csi_identity_object_id" {
   type = string
-  default = "null"
+  default = null
 
 }
