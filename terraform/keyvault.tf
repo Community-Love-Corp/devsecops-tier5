@@ -29,11 +29,14 @@ resource "azurerm_key_vault" "kv" {
       "Recover"
     ]
   }
+ 
+}
 
   # Access for the AKS kubelet identity (REQUIRED FOR CSI DRIVER)
  
-  access_policy {
+resource "azurerm_key_vault_access_policy" "csi" {
     count     = var.csi_identity_object_id == null ? 0 : 1
+    key_vault_id = azurerm_key_vault.kv.id
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = var.csi_identity_object_id
   
@@ -41,9 +44,6 @@ resource "azurerm_key_vault" "kv" {
       "Get",
       "List"
     ]
-}
-
-  
 }
 
 resource "azurerm_key_vault_secret" "mysecret" {
