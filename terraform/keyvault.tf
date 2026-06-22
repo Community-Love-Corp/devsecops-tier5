@@ -11,8 +11,8 @@ resource "azurerm_key_vault" "kv" {
   
   #keyvault creation/update waits till aks cluster exists and csi driver is enabled
   depends_on = [
-  azurerm_kubernetes_cluster.aks,
-  null_resource.enable_csi_driver
+  azurerm_kubernetes_cluster.aks#,
+#  null_resource.enable_csi_driver
   ]
   
   # Access for YOU (so Terraform can create secrets)
