@@ -31,21 +31,19 @@ resource "azurerm_key_vault" "kv" {
   }
 
   # Access for the AKS kubelet identity (REQUIRED FOR CSI DRIVER)
+ 
   access_policy {
+    count     = var.csi_identity_object_id == null ? 0 : 1
     tenant_id = data.azurerm_client_config.current.tenant_id
-
-    # This is the correct identity for CSI secret mounts
-    #object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
-    
-    # IMPORTANT: Use the CSI addon identity
-    #object_id = azurerm_kubernetes_cluster.aks.key_vault_secrets_provider[0].secret_identity[0].object_id
     object_id = var.csi_identity_object_id
-
+  
     secret_permissions = [
       "Get",
       "List"
     ]
-  }
+}
+
+  
 }
 
 resource "azurerm_key_vault_secret" "mysecret" {
