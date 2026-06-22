@@ -106,3 +106,66 @@ Added RBAC to enable the cluster to access the key vault, to access secret. This
 Sunday 22 June 2026 00:54: 
 
 ![ Pipeline for AKS App deployment](./cicd.jpg)
+
+However app not functional because of error on cmd 'kubectl describe pod jaydemo-api-xxx..':
+
+```
+ManagedIdentityCredential authentication failed.
+the requested identity isn't assigned to this resource.
+Identity not found.
+```
+
+0.18 Kali Linux
+
+Monday 22 June 2026 16:07: 
+
+Updated keyvault.tf, to use kubelet identity to access keyvault:
+
+```terraform
+data "azurerm_client_config" "current" {}
+
+resource "azurerm_key_vault" "kv" {
+  name                       = "${var.prefix}-kv"
+  location                   = var.location
+  resource_group_name        = azurerm_resource_group.rg.name
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  sku_name                   = "standard"
+  purge_protection_enabled   = false
+  soft_delete_retention_days = 7
+
+  # Access for YOU (so Terraform can create secrets)
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    secret_permissions = [
+      "Get",
+      "List",
+      "Set",
+      "Delete",
+      "Purge",
+      "Recover"
+    ]
+  }
+
+  # Access for the AKS kubelet identity (REQUIRED FOR CSI DRIVER)
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+
+    # This is the correct identity for CSI secret mounts
+    object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+
+    secret_permissions = [
+      "Get",
+      "List"
+    ]
+  }
+}
+
+resource "azurerm_key_vault_secret" "mysecret" {
+  name         = "mysecret"
+  value        = "your-super-secret-value"
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+```
