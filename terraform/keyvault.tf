@@ -9,9 +9,12 @@ resource "azurerm_key_vault" "kv" {
   purge_protection_enabled   = false
   soft_delete_retention_days = 7
   
+  #keyvault creation/update waits till aks cluster exists and csi driver is enabled
   depends_on = [
-    azurerm_kubernetes_cluster.aks
+  azurerm_kubernetes_cluster.aks,
+  null_resource.enable_csi_driver
   ]
+  
   # Access for YOU (so Terraform can create secrets)
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id

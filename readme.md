@@ -169,7 +169,7 @@ resource "azurerm_key_vault_secret" "mysecret" {
 }
 
 ```
-Hotfix: 
+Hotfix #2: 
 
 Monday 22 June 2026 16:25 
 
@@ -180,3 +180,9 @@ The CICD pipeline experienced a race condition trying to update both the key vau
     azurerm_kubernetes_cluster.aks
   ]
 ```
+
+Hotfix #3: 
+
+Monday 22 June 2026 17:00
+
+Turns out that key vault needs CSI driver to be installed. Presently, MS does not expose that addon to the provider to enable via terraform, hence a null_resource has been added to aks.tf, in order to remain committed to IaC paradigm. Futher, Update/Creation of key vault is made dependant on running of that code snipped. 

@@ -21,7 +21,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
   
   key_vault_secrets_provider {
-    secret_rotation_enabled = true
+    secret_rotation_enabled  = true
+    secret_rotation_interval = "2m"
   }
   
   lifecycle {
@@ -51,4 +52,19 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
   # FIXED: Target the Kubelet Identity block instead of the Control Plane Identity
   principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
   skip_service_principal_aad_check = true
+}
+
+resource "null_resource" "enable_csi_driver" {
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+
+  provisioner "local-exec" {
+    command = <<EOT
+      az aks enable-addons \
+        --addons azure-keyvault-secrets-provider \
+        --resource-group ${azurerm_resource_group.rg.name} \
+        --name ${azurerm_kubernetes_cluster.aks.name}
+    EOT
+  }
 }
