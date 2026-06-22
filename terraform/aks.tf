@@ -60,19 +60,19 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
   skip_service_principal_aad_check = true
 }
 
-resource "azurerm_virtual_machine_scale_set_extension" "assign_csi_identity" {
-  name      = "assign-csi-identity"
-  virtual_machine_scale_set_id = azurerm_kubernetes_cluster.aks.default_node_pool[0].node_pool_id
-  publisher                    = "Microsoft.ManagedIdentity"
-  type                         = "ManagedIdentityExtensionForLinux"
-  type_handler_version         = "1.0"
+#resource "azurerm_virtual_machine_scale_set_extension" "assign_csi_identity" {
+#  name      = "assign-csi-identity"
+#  virtual_machine_scale_set_id = azurerm_kubernetes_cluster.aks.default_node_pool[0].node_pool_id
+#  publisher                    = "Microsoft.ManagedIdentity"
+#  type                         = "ManagedIdentityExtensionForLinux"
+#  type_handler_version         = "1.0"
   
-  settings = jsonencode({
-    userAssignedIdentities = [
-      var.csi_identity_resource_id
-    ]
-  })  
-}
+ # settings = jsonencode({
+ #   userAssignedIdentities = [
+ #     var.csi_identity_resource_id
+ #   ]
+ # })  
+#}
 
 #resource "null_resource" "disable_csi_driver" {
 #  depends_on = [
