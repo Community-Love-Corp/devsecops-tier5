@@ -38,7 +38,7 @@ resource "azurerm_key_vault" "kv" {
     #object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
     
     # IMPORTANT: Use the CSI addon identity
-    object_id = azurerm_kubernetes_cluster.key_vault_secrets_provider[0].secret_identity[0].object_id
+    object_id = azurerm_kubernetes_cluster.aks.key_vault_secrets_provider[0].secret_identity[0].object_id
 
     secret_permissions = [
       "Get",
