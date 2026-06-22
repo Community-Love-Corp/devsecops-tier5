@@ -169,3 +169,14 @@ resource "azurerm_key_vault_secret" "mysecret" {
 }
 
 ```
+Hotfix: 
+
+Monday 22 June 2026 16:25 
+
+The CICD pipeline experienced a race condition trying to update both the key vault and aks cluster parallely after change above. Hence added following snippet after keyvault creation and before applying access policies:
+
+```
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+```

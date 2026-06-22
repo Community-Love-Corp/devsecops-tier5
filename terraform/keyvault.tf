@@ -8,7 +8,10 @@ resource "azurerm_key_vault" "kv" {
   sku_name                   = "standard"
   purge_protection_enabled   = false
   soft_delete_retention_days = 7
-
+  
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
   # Access for YOU (so Terraform can create secrets)
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
