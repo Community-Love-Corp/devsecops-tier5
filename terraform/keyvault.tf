@@ -35,7 +35,10 @@ resource "azurerm_key_vault" "kv" {
     tenant_id = data.azurerm_client_config.current.tenant_id
 
     # This is the correct identity for CSI secret mounts
-    object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+    #object_id = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
+    
+    # IMPORTANT: Use the CSI addon identity
+    object_id = azurerm_kubernetes_cluster.key_vault_secrets_provider[0].secret_identity[0].object_id
 
     secret_permissions = [
       "Get",

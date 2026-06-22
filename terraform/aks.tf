@@ -20,10 +20,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin = "kubenet"
   }
   
- # key_vault_secrets_provider {
- #   secret_rotation_enabled  = true
- #   secret_rotation_interval = "2m"
- # }
+  key_vault_secrets_provider {
+    secret_rotation_enabled  = true
+    secret_rotation_interval = "2m"
+  }
   
   lifecycle {
     ignore_changes = [
@@ -54,33 +54,33 @@ resource "azurerm_role_assignment" "aks_acr_pull" {
   skip_service_principal_aad_check = true
 }
 
-resource "null_resource" "disable_csi_driver" {
-  depends_on = [
-    azurerm_kubernetes_cluster.aks
-  ]
+#resource "null_resource" "disable_csi_driver" {
+#  depends_on = [
+#    azurerm_kubernetes_cluster.aks
+#  ]
 
-  provisioner "local-exec" {
-    command = <<EOT
-      az aks disable-addons \
-        --addons azure-keyvault-secrets-provider \
-        --resource-group ${azurerm_resource_group.rg.name} \
-        --name ${azurerm_kubernetes_cluster.aks.name} || true
-    EOT
-  }
-}
+#  provisioner "local-exec" {
+#    command = <<EOT
+#      az aks disable-addons \
+#        --addons azure-keyvault-secrets-provider \
+#        --resource-group ${azurerm_resource_group.rg.name} \
+#        --name ${azurerm_kubernetes_cluster.aks.name} || true
+#    EOT
+#  }
+#}
 
-resource "null_resource" "enable_csi_driver" {
-  depends_on = [
-    null_resource.disable_csi_driver
+#resource "null_resource" "enable_csi_driver" {
+#  depends_on = [
+#    null_resource.disable_csi_driver
 
-  ]
+#  ]
 
-  provisioner "local-exec" {
-    command = <<EOT
-      az aks enable-addons \
-        --addons azure-keyvault-secrets-provider \
-        --resource-group ${azurerm_resource_group.rg.name} \
-        --name ${azurerm_kubernetes_cluster.aks.name}
-    EOT
-  }
-}
+#  provisioner "local-exec" {
+#    command = <<EOT
+#      az aks enable-addons \
+#        --addons azure-keyvault-secrets-provider \
+#        --resource-group ${azurerm_resource_group.rg.name} \
+#        --name ${azurerm_kubernetes_cluster.aks.name}
+#    EOT
+#  }
+#}
