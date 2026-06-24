@@ -138,7 +138,13 @@ jobs:
         done
         echo "Timed out waiting for LoadBalancer IP"
         exit 1    
-        
+
+       
+#    - name: Make Typescript recognise Node.js global variables
+#      run: npm install --save-dev @types/node 
+#      working-directory: tests
+
+                        
     - name: Run tests
       env:
         API_URL: ${{ secrets.API_URL }}
