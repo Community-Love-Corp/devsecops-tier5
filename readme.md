@@ -193,3 +193,22 @@ Hotfix #5:
 Monday 22 June 2026 17:14
 
 Added another null_resource to first disable the driver, and then reenable it because terraform was saying that the resource is already enabled.
+
+
+0.19 Kali Linux local branch
+
+Wednesday 24 June 2026 15:22: Baseline before localising the Continuous Integration and Continuous Development (CICD) non-working solution, in order to localise it (non CI-CD), in order to troubleshoot/test/debug it more easily before returning to another attempt to implement CICD. See Terraform state:
+
+┌──(jyotirmay㉿kali3)-[~/eclipse-workspace/devsecops-terraform-k8s/terraform]
+└─$ terraform state list
+data.azurerm_client_config.current
+azurerm_container_registry.acr
+azurerm_key_vault.kv
+azurerm_key_vault_access_policy.csi[0]
+azurerm_key_vault_secret.mysecret
+azurerm_kubernetes_cluster.aks
+azurerm_resource_group.rg
+azurerm_role_assignment.aks_acr_pull
+azurerm_subnet.subnet
+azurerm_user_assigned_identity.csi_identity
+azurerm_virtual_network.vnet
