@@ -140,9 +140,9 @@ jobs:
         exit 1    
 
        
-#    - name: Make Typescript recognise Node.js global variables
-#      run: npm install --save-dev @types/node 
-#      working-directory: tests
+    - name: Make Typescript recognise Node.js global variables
+      run: npm install --save-dev @types/node 
+      working-directory: tests
 
                         
     - name: Run tests
