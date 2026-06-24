@@ -249,3 +249,28 @@ Wednesday 24 June 2026 19:48:
 
 ![ AKS working from CICD](./working.jpg)
 
+Hotfix # 3:
+
+Wednesday 24 June 2026 20:30:
+
+The tests were not working as the incorrect variable for API_URL was being referenced. Replaced cicd test job's 'Run tests' step:
+
+```
+    - name: Run tests
+      env:
+        API_URL: ${{ secrets.API_URL }}
+      run: npm run test:ci --reporter=line
+      working-directory: tests
+```
+
+TO (note the change in 'env:' label) 
+
+```
+    - name: Run tests
+      env:
+        API_URL: ${{ env.API_URL }}
+      run: npm run test:ci --reporter=line
+      working-directory: tests
+```
+
+
