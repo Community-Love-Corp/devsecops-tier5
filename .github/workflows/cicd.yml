@@ -122,9 +122,17 @@ jobs:
       run: |
         for i in {1..30}; do
           IP=$(kubectl get svc jaydemo-api -o
-          jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          jsonpath="{.status.loadBalancer.ingress[0].ip}")
+          echo "Current IP: $IP"
+          HOST=$(kubectl get svc jaydemo-api -o
+          jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+          echo "Current HOST: $HOST"          
           if [ -n "$IP" ]; then
             echo "API_URL=http://$IP" >> $GITHUB_ENV
+            exit 0
+          fi
+          if [ -n "$HOST" ]; then
+            echo "API_URL=http://$HOST" >> $GITHUB_ENV
             exit 0
           fi
           echo "Waiting for LoadBalancer IP..."
