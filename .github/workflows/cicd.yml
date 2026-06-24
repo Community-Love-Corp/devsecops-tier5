@@ -2,7 +2,7 @@ name: End-to-End CI-CD Pipeline
 
 on:
   push:
-    branches: [ "local" ]
+    branches: [ "dev" ]
   workflow_dispatch:
 
 jobs:
