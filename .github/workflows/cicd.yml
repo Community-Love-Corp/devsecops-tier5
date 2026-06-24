@@ -121,11 +121,9 @@ jobs:
     - name: Wait for service external IP
       run: |
         for i in {1..30}; do
-          IP=$(kubectl get svc jaydemo-api -o
-          jsonpath="{.status.loadBalancer.ingress[0].ip}")
+          IP=$(kubectl get svc jaydemo-api -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
           echo "Current IP: $IP"
-          HOST=$(kubectl get svc jaydemo-api -o
-          jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+          HOST=$(kubectl get svc jaydemo-api -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
           echo "Current HOST: $HOST"          
           if [ -n "$IP" ]; then
             echo "API_URL=http://$IP" >> $GITHUB_ENV
