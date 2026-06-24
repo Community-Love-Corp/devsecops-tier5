@@ -273,4 +273,4 @@ TO (note the change in 'env:' label)
       working-directory: tests
 ```
 
-
+![ AKS Test working from CICD](./Test-Working.jpg)
