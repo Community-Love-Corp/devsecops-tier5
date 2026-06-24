@@ -234,3 +234,18 @@ Wednesday 24 June 2026 15:22:
 Wednesday 24 June 2026 18:30:
 
 Attempt #2 to make app work on AKS with CICD.
+
+1.2 Kali Linux 
+
+Wednesday 24 June 2026 19:30:
+
+Attempt #2 succeeded, but playwright test failed as the test code was using request.get with a baseurl variable. However, a baseurl variable only works automatically, as the request.get was assuming, if the command using it is request.goto. Hence, updated this code snippet to use process variable to gather the url provided by pipeline. Since Typescript does not know about Node.js global variables like 'process',  so ran 'npm install --save-dev @types/node', and this make typescript recognise the process variable. This command was also added to cicd.yaml.
+
+
+Hotfix # 1
+
+Wednesday 24 June 2026 19:48:
+
+
+![ AKS working from CICD](./working.jpg)
+
