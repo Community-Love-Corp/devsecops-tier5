@@ -9,12 +9,7 @@ terraform {
   }
 
 
-  backend "azurerm" {
-    resource_group_name   = "msdocs-core-sql"
-    storage_account_name  = "memories123"
-    container_name        = "tfstate"
-    key                   = "aks.terraform.tfstate"
-  }
+  backend "local" {}
 }
 
 provider "azurerm" {

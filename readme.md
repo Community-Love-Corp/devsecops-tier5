@@ -212,3 +212,15 @@ azurerm_role_assignment.aks_acr_pull
 azurerm_subnet.subnet
 azurerm_user_assigned_identity.csi_identity
 azurerm_virtual_network.vnet
+
+1.0 Kali Linux local branch - working
+
+Wednesday 24 June 2026 17:53:
+
+SETUP PORT FORWARDING: 
+
+![ Setup for local Terraform driven AKS](./aks-terraform-local-setup.jpg)
+
+TEST:
+
+![ AKS working from local Terraform](./aks-working-terraform.jpg)
