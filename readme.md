@@ -224,3 +224,13 @@ SETUP PORT FORWARDING:
 TEST:
 
 ![ AKS working from local Terraform](./aks-working-terraform.jpg)
+
+0.19 Kali Linux local branch
+
+Wednesday 24 June 2026 15:22: 
+
+1.1 Kali Linux 
+
+Wednesday 24 June 2026 18:30:
+
+Attempt #2 to make app work on AKS with CICD.
