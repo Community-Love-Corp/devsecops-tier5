@@ -274,3 +274,21 @@ TO (note the change in 'env:' label)
 ```
 
 ![ AKS Test working from CICD](./Test-Working.jpg)
+
+1.3 Kali Linux 
+
+Thursday 25 June 2026 17:35: Fix made to make get reports working. In particular, the fix was made to tests/playwright.config.ts:
+
+```
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig ({
+  use: {
+   baseURL: process.env.API_URL, 
+  },
+  reporter: [
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['allure-playwright']
+  ],
+});
+```

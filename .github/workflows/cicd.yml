@@ -144,11 +144,17 @@ jobs:
       run: npm install --save-dev @types/node 
       working-directory: tests
 
-                        
+    - name: List test output
+      run: |
+        echo "Listing test output:"
+        ls -R tests
+                                    
     - name: Run tests
       env:
         API_URL: ${{ env.API_URL }}
-      run: npm run test:ci --reporter=line
+      run: |
+        npx playwright install
+        npx playwright test
       working-directory: tests
 
     - name: Upload Playwright HTML report
