@@ -166,12 +166,18 @@ jobs:
         path: tests/playwright-report
         retention-days: 7
 
-    - name: Upload Allure results
+    - name: Generate Allure HTML report
+      if: always()
+      run: |
+        npx allure generate ./allure-results --output ./allure-report
+      working-directory: tests
+            
+    - name: Upload Allure HTML results
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: allure-results
-        path: tests/allure-results
+        name: allure-report
+        path: tests/allure-report
         retention-days: 7
 
   # 5. DESTROY JOB (With Manual Approval)

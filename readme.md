@@ -300,3 +300,30 @@ Evidence of Report Generation in pipeline:
 The report:
 
 ![ AKS Test working from CICD](./Allure-report.jpg)
+
+1.4 Kali Linux 
+
+Thursday 25 June 2026 20:43: Fix made to make get allure reports working. In particular, in cicd.yaml, I was missing 'Generate Allure HTML report' step:
+
+```
+    - name: Generate Allure HTML report
+      if: always()
+      run: |
+        npx allure generate ./allure-results --output ./allure-report
+      working-directory: tests
+            
+    - name: Upload Allure HTML results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report
+        path: tests/allure-report
+        retention-days: 7
+```
+Now output is:
+
+a. Playright-report.zip -> Playwright HTML
+
+b. allure-results.zip -> raw Allure JSON/XML
+
+c. allure-report.zip -> Allure HTML dashboard
