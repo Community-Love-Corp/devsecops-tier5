@@ -249,6 +249,8 @@ Wednesday 24 June 2026 19:48:
 
 ![ AKS working from CICD](./working.jpg)
 
+Note: cicd.yaml implements gates via github environments.
+ 
 Hotfix # 3:
 
 Wednesday 24 June 2026 20:30:
@@ -299,7 +301,7 @@ Evidence of Report Generation in pipeline:
 
 The report:
 
-![ AKS Test working from CICD](./Allure-report.jpg)
+![ AKS Test working from CICD - playwright](./playwright-test-report.jpg)
 
 1.4 Kali Linux 
 
@@ -351,8 +353,36 @@ Update 'Run tests' step in cicd.yaml:
 
 Now output is:
 
-a. Playright-report.zip -> Playwright HTML
+a. Playright-report.zip -> Playwright HTML, as before in Release '1.2 Kali Linux'
 
-b. allure-results.zip -> raw Allure JSON/XML
+b. allure-report.zip -> Allure HTML dashboard with raw Allure JSON/XML in data and such folders
 
-c. allure-report.zip -> Allure HTML dashboard
+In order to view the Allure report:
+
+i. Locally
+Navigate to tests/allure-report folder, then run following commands to launch a tiny local server:
+
+```
+npx http-server .
+```
+Finally, navigate to http://127.0.0.1/8080
+
+ii. CI artifact download
+Download artifact from Allure step in the Test job in Github for 'devsecops-tier5' repository. Next extract the zip file. navigate to resulting folder, and then run:
+
+```
+'npx http-server . ' or 'python -m http.server 8000'
+```
+Finally, navigate to http://127.0.0.1/8080, or 'http://localhost:8000' in the case of python.
+
+<b>Allure Test Summary:</b>
+
+![ Allure report from CICD](./tests/allure-report1.jpg)
+
+<b>Allure Test Suite View:</b>
+
+![ Allure report from CICD](./tests/allure-report2.jpg)
+
+<b>Allure Response Time Graph: </b>
+
+![ Allure report from CICD](./allure-report.jpg)

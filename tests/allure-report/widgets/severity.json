@@ -1,0 +1,1 @@
+[{"uid":"9892bd328c94c3ba","name":"health endpoint","time":{"start":1782385208868,"stop":1782385209789,"duration":921},"status":"failed","severity":"normal"},{"uid":"de119389c24b3abc","name":"dummy test","time":{"start":1782385212100,"stop":1782385212240,"duration":140},"status":"passed","severity":"normal"}]

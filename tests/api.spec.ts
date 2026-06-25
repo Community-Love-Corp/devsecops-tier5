@@ -13,7 +13,9 @@ test('health endpoint', async ({ request }) => {
 }); 
 
 test('dummy test', async () => {
-  expect(true).toBe(true);
+  await allure.step(`Validate stub`, async () => {
+    expect(true).toBe(true);
+  });
 });
 
 
