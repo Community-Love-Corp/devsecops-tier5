@@ -6,14 +6,15 @@
   "scripts": {
     "test": "playwright test",
     "test:ci": "npx playwright install && playwright test"
-    },
+  },
   "keywords": [],
   "author": "Jyotirmay Sarna",
   "license": "Do not copy, use or share all or whole of this code, without permission",
   "Dependencies": {},
   "devDependencies": {
     "@playwright/test": "^1.61.0",
-    "allure-playwright": "^3.10.0"
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.10.1"
   },
   "main": "index.js",
   "dependencies": {

@@ -320,6 +320,18 @@ Thursday 25 June 2026 20:43: Fix made to make get allure reports working. In par
         path: tests/allure-report
         retention-days: 7
 ```
+HOTFIX #1- Thursday 25 June 2026 at 22:00:
+
+```
+Pre-req: Ensure allure-commandline is installed, and node version is 22.
+Run:
+rm -rf allure-results
+rm -rf allure-report
+npx playwright test
+npx allure generate ./allure-results --output ./allure-report
+
+```
+
 Now output is:
 
 a. Playright-report.zip -> Playwright HTML
