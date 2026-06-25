@@ -323,13 +323,30 @@ Thursday 25 June 2026 20:43: Fix made to make get allure reports working. In par
 HOTFIX #1- Thursday 25 June 2026 at 22:00:
 
 ```
-Pre-req: Ensure allure-commandline is installed, and node version is 22.
-Run:
+i. Pre-req: Ensure allure-commandline is installed, and node version is 22, and atleast one test exists that passes inorder the essential elements needed for allure report to render, to be present.
+
+ii. Run:
 rm -rf allure-results
 rm -rf allure-report
 npx playwright test
 npx allure generate ./allure-results --output ./allure-report
 
+```
+HOTFIX #2 - Thursday 25 June 2026 at 22:40
+
+```
+Update 'Run tests' step in cicd.yaml:
+
+    - name: Run tests
+      env:
+        API_URL: ${{ env.API_URL }}
+      run: |
+        npx playwright install
+        npm install --save-dev allure-playwright
+        rm -rf allure-results
+        rm -rf allure-report
+        npx playwright test
+      working-directory: tests
 ```
 
 Now output is:

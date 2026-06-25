@@ -155,6 +155,8 @@ jobs:
       run: |
         npx playwright install
         npm install --save-dev allure-playwright
+        rm -rf allure-results
+        rm -rf allure-report
         npx playwright test
       working-directory: tests
 
