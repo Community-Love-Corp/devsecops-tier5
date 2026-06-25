@@ -386,3 +386,9 @@ Finally, navigate to http://127.0.0.1/8080, or 'http://localhost:8000' in the ca
 <b>Allure Response Time Graph: </b>
 
 ![ Allure report from CICD](./allure-report.jpg)
+
+1.5 Kali Linux 
+
+Thursday 25 June 2026 23:59:
+
+Added sample cicd.yaml test report artifacts to tests folder, and to .gitignore.

@@ -10,3 +10,6 @@ kubeconfig
 #Crash log files
 crash.log
 crash.*.log
+
+#ci sample artifacts
+./tests/*.zip
