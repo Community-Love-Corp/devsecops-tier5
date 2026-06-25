@@ -154,6 +154,7 @@ jobs:
         API_URL: ${{ env.API_URL }}
       run: |
         npx playwright install
+        npm install --save-dev allure-playwright
         npx playwright test
       working-directory: tests
 
