@@ -292,3 +292,11 @@ export default defineConfig ({
   ],
 });
 ```
+
+Evidence of Report Generation in pipeline:
+
+![ AKS Test working from CICD](./pipeline-reports.jpg)
+
+The report:
+
+![ AKS Test working from CICD](./Allure-report.jpg)
